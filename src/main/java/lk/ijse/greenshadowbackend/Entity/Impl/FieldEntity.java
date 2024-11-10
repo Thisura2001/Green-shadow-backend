@@ -1,15 +1,14 @@
 package lk.ijse.greenshadowbackend.Entity.Impl;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.greenshadowbackend.Entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.awt.*;
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,4 +25,6 @@ public class FieldEntity implements SuperEntity {
     private String fieldImg1;
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImg2;
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
+    private List<CropEntity> crops;
 }

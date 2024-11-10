@@ -1,9 +1,6 @@
 package lk.ijse.greenshadowbackend.Entity.Impl;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.greenshadowbackend.Entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +21,7 @@ public class CropEntity implements SuperEntity {
     private String cropImg;
     private String category;
     private String season;
+    @ManyToOne
+    @JoinColumn(name = "fieldId")
+    private FieldEntity field;
 }
