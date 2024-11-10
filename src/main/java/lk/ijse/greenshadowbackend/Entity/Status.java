@@ -1,5 +1,5 @@
 package lk.ijse.greenshadowbackend.Entity;
 
-public enum VehicleStatus {
+public enum Status {
     AVAILABLE,UNAVAILABLE
 }
