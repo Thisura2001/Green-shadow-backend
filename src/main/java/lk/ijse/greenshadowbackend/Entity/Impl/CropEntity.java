@@ -24,5 +24,4 @@ public class CropEntity implements SuperEntity {
     private String cropImg;
     private String category;
     private String season;
-
 }
