@@ -1,13 +1,12 @@
 package lk.ijse.greenshadowbackend.Entity.Impl;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.greenshadowbackend.Entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +20,10 @@ public class LogEntity implements SuperEntity {
     private String log_details;
     @Column(columnDefinition = "LONGTEXT")
     private String observed_image;
+    @OneToMany(mappedBy = "fieldId",cascade = CascadeType.ALL)
+    private List<FieldEntity> fields;
+    @OneToMany(mappedBy = "cropId",cascade = CascadeType.ALL)
+    private List<CropEntity> crops;
+    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    private List<StaffEntity> staff;
 }
