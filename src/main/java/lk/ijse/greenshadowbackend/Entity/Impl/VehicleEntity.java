@@ -18,4 +18,7 @@ public class VehicleEntity implements SuperEntity {
     private String fuelType;
     @Enumerated(EnumType.STRING)
     private Status status;
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private StaffEntity assigned_staff;
 }
