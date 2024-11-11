@@ -1,8 +1,11 @@
 package lk.ijse.greenshadowbackend.Controller;
 
+import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
+import lk.ijse.greenshadowbackend.Dto.CropStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.CropDto;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
 import lk.ijse.greenshadowbackend.Service.CropService;
+import lk.ijse.greenshadowbackend.Util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,5 +52,12 @@ public class CropController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @GetMapping(value = "/{cropId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CropStatus getCropById(@PathVariable ("cropId") String cropId){
+       if (!Regex.cropCodeMatcher(cropId)){
+           return new SelectedErrorStatusCode(1,"Invalid Crop Id");
+       }
+       return cropService.getCropById(cropId);
     }
 }

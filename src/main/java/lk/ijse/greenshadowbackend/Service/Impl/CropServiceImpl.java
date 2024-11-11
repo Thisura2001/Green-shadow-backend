@@ -1,5 +1,7 @@
 package lk.ijse.greenshadowbackend.Service.Impl;
 
+import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
+import lk.ijse.greenshadowbackend.Dto.CropStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.CropDto;
 import lk.ijse.greenshadowbackend.Entity.Impl.CropEntity;
 import lk.ijse.greenshadowbackend.Repository.CropRepo;
@@ -23,6 +25,16 @@ public class CropServiceImpl implements CropService {
         CropEntity save = cropRepo.save(mapper.toCropEntity(cropDto));
         if (save==null){
             throw new RuntimeException("Crop Save Failed");
+        }
+    }
+
+    @Override
+    public CropStatus getCropById(String cropId) {
+        if (cropRepo.existsById(cropId)){
+            CropEntity referenceById = cropRepo.getReferenceById(cropId);
+            return mapper.toCropDTO(referenceById);
+        }else {
+            return new SelectedErrorStatusCode(2,"Crop does not exist!!");
         }
     }
 }
