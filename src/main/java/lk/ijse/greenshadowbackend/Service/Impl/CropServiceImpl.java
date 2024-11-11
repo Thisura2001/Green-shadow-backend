@@ -56,4 +56,18 @@ public class CropServiceImpl implements CropService {
             cropRepo.deleteById(cropId);
         }
     }
+
+    @Override
+    public void updateCrop(String cropId, CropDto cropDto) {
+        Optional<CropEntity> byId = cropRepo.findById(cropId);
+        if (!byId.isPresent()){
+            throw new CropNotFoundException("Crp not found !!");
+        }else {
+            byId.get().setCommonName(cropDto.getCommonName());
+            byId.get().setScientificName(cropDto.getScientificName());
+            byId.get().setCropImg(cropDto.getCropImg());
+            byId.get().setCategory(cropDto.getCategory());
+            byId.get().setSeason(cropDto.getSeason());
+        }
+    }
 }

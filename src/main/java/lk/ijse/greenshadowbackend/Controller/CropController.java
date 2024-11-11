@@ -23,14 +23,15 @@ import java.util.List;
 public class CropController {
     @Autowired
     private CropService cropService;
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void>saveCrop(
+    public ResponseEntity<Void> saveCrop(
             @RequestPart("commonName") String commonName,
             @RequestPart("scientificName") String scientificName,
             @RequestPart("cropImg") MultipartFile cropImg,
             @RequestPart("category") String category,
             @RequestPart("season") String season
-    ){
+    ) {
         String cropBase64 = "";
 
         try {
@@ -50,34 +51,68 @@ public class CropController {
         } catch (DataPersistException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping(value = "/{cropId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CropStatus getCropById(@PathVariable ("cropId") String cropId){
-       if (!Regex.cropCodeMatcher(cropId)){
-           return new SelectedErrorStatusCode(1,"Invalid Crop Id");
-       }
-       return cropService.getCropById(cropId);
+    public CropStatus getCropById(@PathVariable("cropId") String cropId) {
+        if (!Regex.cropCodeMatcher(cropId)) {
+            return new SelectedErrorStatusCode(1, "Invalid Crop Id");
+        }
+        return cropService.getCropById(cropId);
     }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CropDto>getAllCrops(){
+    public List<CropDto> getAllCrops() {
         return cropService.getAllCrops();
     }
+
     @DeleteMapping(value = "/{cropId}")
-    public ResponseEntity<Void> deleteCrop(@PathVariable ("cropId") String cropId){
+    public ResponseEntity<Void> deleteCrop(@PathVariable("cropId") String cropId) {
         try {
-            if (!Regex.cropCodeMatcher(cropId)){
+            if (!Regex.cropCodeMatcher(cropId)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             cropService.deleteCrop(cropId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }catch (CropNotFoundException e){
+        } catch (CropNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{cropId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> UpdateCrop(@PathVariable("cropId") String cropId,
+                                           @RequestPart("commonName") String commonName,
+                                           @RequestPart("scientificName") String scientificName,
+                                           @RequestPart("cropImg") MultipartFile cropImg,
+                                           @RequestPart("category") String category,
+                                           @RequestPart("season") String season
+    ) {
+        String cropBase64 = "";
+        try {
+            byte[] byteCropImg = cropImg.getBytes();
+            cropBase64 = Base64.getEncoder().encodeToString(byteCropImg);
+            CropDto cropDto = new CropDto();
+            cropDto.setCropId(cropId);
+            cropDto.setCommonName(commonName);
+            cropDto.setScientificName(scientificName);
+            cropDto.setCropImg(cropBase64);
+            cropDto.setCategory(category);
+            cropDto.setSeason(season);
+            cropService.updateCrop(cropId, cropDto);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
