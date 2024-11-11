@@ -25,8 +25,8 @@ public class FieldEntity implements SuperEntity {
     private String fieldImg1;
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImg2;
-    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
-    private List<CropEntity> crops;
+//    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
+//    private List<CropEntity> crops;
     @ManyToMany(mappedBy = "fields")
     private List<StaffEntity> allocated_staff;
 }
