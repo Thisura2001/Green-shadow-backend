@@ -3,6 +3,7 @@ package lk.ijse.greenshadowbackend.Controller;
 import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.CropStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.CropDto;
+import lk.ijse.greenshadowbackend.Exception.CropNotFoundException;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
 import lk.ijse.greenshadowbackend.Service.CropService;
 import lk.ijse.greenshadowbackend.Util.Regex;
@@ -64,5 +65,21 @@ public class CropController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CropDto>getAllCrops(){
         return cropService.getAllCrops();
+    }
+    @DeleteMapping(value = "/{cropId}")
+    public ResponseEntity<Void> deleteCrop(@PathVariable ("cropId") String cropId){
+        try {
+            if (!Regex.cropCodeMatcher(cropId)){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            cropService.deleteCrop(cropId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (CropNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

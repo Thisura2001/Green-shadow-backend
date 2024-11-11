@@ -11,4 +11,6 @@ public interface CropService {
     CropStatus getCropById(String cropId);
 
     List<CropDto> getAllCrops();
+
+    void deleteCrop(String cropId);
 }
