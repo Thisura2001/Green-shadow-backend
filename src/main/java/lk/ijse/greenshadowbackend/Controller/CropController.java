@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/crop")
@@ -59,5 +60,9 @@ public class CropController {
            return new SelectedErrorStatusCode(1,"Invalid Crop Id");
        }
        return cropService.getCropById(cropId);
+    }
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<CropDto>getAllCrops(){
+        return cropService.getAllCrops();
     }
 }
