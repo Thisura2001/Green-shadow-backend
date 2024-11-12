@@ -13,8 +13,8 @@ import java.util.List;
 public class FieldDto implements FieldStatus {
     private String fieldId;
     private String fieldName;
-    private Point location;
-    private Double extend;
+    private String location;
+    private String extend;
     private String fieldImg1;
     private String fieldImg2;
     private List<CropDto> crops;
