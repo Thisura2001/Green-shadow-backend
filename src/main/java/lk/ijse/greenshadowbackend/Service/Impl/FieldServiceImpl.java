@@ -1,5 +1,7 @@
 package lk.ijse.greenshadowbackend.Service.Impl;
 
+import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
+import lk.ijse.greenshadowbackend.Dto.FieldStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.FieldDto;
 import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
 import lk.ijse.greenshadowbackend.Repository.FieldRepo;
@@ -23,6 +25,16 @@ public class FieldServiceImpl implements FieldService {
         FieldEntity save = fieldRepo.save(mapping.toFieldEntity(fieldDto));
         if (save==null){
             throw new RuntimeException("Field Save Failed");
+        }
+    }
+
+    @Override
+    public FieldStatus getFieldById(String fieldId) {
+        if (fieldRepo.existsById(fieldId)){
+            FieldEntity referenceById = fieldRepo.getReferenceById(fieldId);
+            return mapping.toFieldDTO(referenceById);
+        }else {
+            return new SelectedErrorStatusCode(2,"Field not found !!");
         }
     }
 }

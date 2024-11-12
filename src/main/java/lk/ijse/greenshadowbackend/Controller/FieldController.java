@@ -1,17 +1,18 @@
 package lk.ijse.greenshadowbackend.Controller;
 
+import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
+import lk.ijse.greenshadowbackend.Dto.FieldStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.FieldDto;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
+import lk.ijse.greenshadowbackend.Exception.FieldNotFoundException;
 import lk.ijse.greenshadowbackend.Service.FieldService;
 import lk.ijse.greenshadowbackend.Util.AppUtil;
+import lk.ijse.greenshadowbackend.Util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
@@ -57,5 +58,13 @@ public class FieldController {
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+    }
+
+    @GetMapping(path = "/{fieldId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public FieldStatus getFieldById(@PathVariable ("fieldId") String fieldId){
+        if (!Regex.fieldCodeMatcher(fieldId)){
+            return new SelectedErrorStatusCode(1,"Field code not matched");
+        }
+        return fieldService.getFieldById(fieldId);
     }
 }

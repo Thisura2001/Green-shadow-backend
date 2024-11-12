@@ -3,6 +3,7 @@ package lk.ijse.greenshadowbackend.Controller;
 import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.CropStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.CropDto;
+import lk.ijse.greenshadowbackend.Dto.Impl.FieldDto;
 import lk.ijse.greenshadowbackend.Exception.CropNotFoundException;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
 import lk.ijse.greenshadowbackend.Service.CropService;
@@ -30,8 +31,9 @@ public class CropController {
             @RequestPart("scientificName") String scientificName,
             @RequestPart("cropImg") MultipartFile cropImg,
             @RequestPart("category") String category,
-            @RequestPart("season") String season
-    ) {
+            @RequestPart("season") String season,
+            @RequestBody FieldDto fieldDto
+            ) {
         String cropBase64 = "";
 
         try {
@@ -45,6 +47,7 @@ public class CropController {
             cropDto.setCropImg(cropBase64);
             cropDto.setCategory(category);
             cropDto.setSeason(season);
+            cropDto.setFieldDto(fieldDto);
 
             cropService.saveCrop(cropDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
