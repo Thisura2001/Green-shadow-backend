@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class StaffServiceImpl implements StaffService {
@@ -35,5 +37,10 @@ public class StaffServiceImpl implements StaffService {
             return mapping.toStaffDTO(referenceById);
         }
         return new SelectedErrorStatusCode(2,"StaffNotFound");
+    }
+
+    @Override
+    public List<StaffDto> getAllStaff() {
+         return mapping.toStaffDTOList(staffRepo.findAll());
     }
 }

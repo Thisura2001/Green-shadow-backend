@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/staff")
 public class StaffController {
@@ -37,5 +39,9 @@ public class StaffController {
             return new SelectedErrorStatusCode(1,"Staff not found");
         }
         return staffService.getStaffById(id);
+    }
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<StaffDto>getAllStaff(){
+        return staffService.getAllStaff();
     }
 }
