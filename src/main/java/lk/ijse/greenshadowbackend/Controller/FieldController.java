@@ -116,7 +116,6 @@ public class FieldController {
             fieldDto.setFieldImg1(byteFieldImg1);
             fieldDto.setFieldImg2(byteFieldImg2);
 
-
             fieldService.updateField(fieldDto);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }catch (DataPersistException e) {
