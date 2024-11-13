@@ -57,4 +57,18 @@ public class FieldServiceImpl implements FieldService {
             fieldRepo.deleteById(fieldId);
         }
     }
+
+    @Override
+    public void updateField(FieldDto fieldDto) {
+        Optional<FieldEntity> byId = fieldRepo.findById(fieldDto.getFieldId());
+        if (!byId.isPresent()){
+            throw new FieldNotFoundException("Can't find Field");
+        }else {
+           byId.get().setFieldName(fieldDto.getFieldName());
+           byId.get().setLocation(fieldDto.getLocation());
+           byId.get().setExtend(fieldDto.getExtend());
+           byId.get().setFieldImg1(fieldDto.getFieldImg1());
+           byId.get().setFieldImg2(fieldDto.getFieldImg2());
+        }
+    }
 }

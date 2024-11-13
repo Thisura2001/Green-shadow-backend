@@ -88,4 +88,43 @@ public class FieldController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping(value = "/{fieldId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void>updateField(@PathVariable ("fieldId") String fieldId,
+                                           @RequestPart ("fieldName")String fieldName,
+                                           @RequestPart ("location")String location,
+                                           @RequestPart ("extend") String extend,
+                                           @RequestPart ("fieldImg1")MultipartFile fieldImg1,
+                                           @RequestPart ("fieldImg2")MultipartFile fieldImg2){
+
+        String byteFieldImg1 = "";
+        String byteFieldImg2 = "";
+
+        try {
+            byte[] bytesFieldImage1 = fieldImg1.getBytes();
+            byteFieldImg1 = AppUtil.cropImageToBase64(bytesFieldImage1);
+
+            byte[] bytesFieldImage2 = fieldImg2.getBytes();
+            byteFieldImg2 = AppUtil.cropImageToBase64(bytesFieldImage2);
+
+
+            FieldDto fieldDto = new FieldDto();
+
+            fieldDto.setFieldId(fieldId);
+            fieldDto.setFieldName(fieldName);
+            fieldDto.setLocation(location);
+            fieldDto.setExtend(extend);
+            fieldDto.setFieldImg1(byteFieldImg1);
+            fieldDto.setFieldImg2(byteFieldImg2);
+
+
+            fieldService.updateField(fieldDto);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }catch (DataPersistException e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }catch (Exception e){
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
