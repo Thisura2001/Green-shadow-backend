@@ -60,4 +60,17 @@ public class StaffController {
            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
+    @PutMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void>updateStaff(@PathVariable String id,@RequestBody StaffDto staffDto){
+        try {
+            if (!Regex.staffIdMatcher(id)|| staffDto == null){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            staffService.updateStaff(id,staffDto);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -4,6 +4,7 @@ import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
 import lk.ijse.greenshadowbackend.Dto.StaffStatus;
 import lk.ijse.greenshadowbackend.Entity.Impl.StaffEntity;
+import lk.ijse.greenshadowbackend.Exception.StaffNotFoundException;
 import lk.ijse.greenshadowbackend.Repository.StaffRepo;
 import lk.ijse.greenshadowbackend.Service.StaffService;
 import lk.ijse.greenshadowbackend.Util.AppUtil;
@@ -53,6 +54,24 @@ public class StaffServiceImpl implements StaffService {
             throw new RuntimeException("staff not found");
         }else {
             staffRepo.deleteById(id);
+        }
+    }
+
+    @Override
+    public void updateStaff(String id, StaffDto staffDto) {
+        Optional<StaffEntity> byId = staffRepo.findById(id);
+        if (!byId.isPresent()){
+            throw new StaffNotFoundException("staff Not found");
+        }else {
+            byId.get().setFirstName(staffDto.getFirstName());
+            byId.get().setDesignation(staffDto.getDesignation());
+            byId.get().setGender(staffDto.getGender());
+            byId.get().setJoined_date(staffDto.getJoined_date());
+            byId.get().setDob(staffDto.getDob());
+            byId.get().setAddress(staffDto.getAddress());
+            byId.get().setContact_no(staffDto.getContact_no());
+            byId.get().setEmail(staffDto.getEmail());
+            byId.get().setRole(staffDto.getRole());
         }
     }
 }
