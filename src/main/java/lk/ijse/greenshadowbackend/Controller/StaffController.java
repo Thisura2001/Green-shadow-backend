@@ -1,16 +1,17 @@
 package lk.ijse.greenshadowbackend.Controller;
 
+import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
+import lk.ijse.greenshadowbackend.Dto.StaffStatus;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
+import lk.ijse.greenshadowbackend.Exception.StaffNotFoundException;
 import lk.ijse.greenshadowbackend.Service.StaffService;
+import lk.ijse.greenshadowbackend.Util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/staff")
@@ -29,5 +30,12 @@ public class StaffController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public StaffStatus getStaffById(@PathVariable ("id") String id){
+        if (!Regex.staffIdMatcher(id)){
+            return new SelectedErrorStatusCode(1,"Staff not found");
+        }
+        return staffService.getStaffById(id);
     }
 }

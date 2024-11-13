@@ -1,6 +1,8 @@
 package lk.ijse.greenshadowbackend.Service.Impl;
 
+import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
+import lk.ijse.greenshadowbackend.Dto.StaffStatus;
 import lk.ijse.greenshadowbackend.Entity.Impl.StaffEntity;
 import lk.ijse.greenshadowbackend.Repository.StaffRepo;
 import lk.ijse.greenshadowbackend.Service.StaffService;
@@ -24,5 +26,14 @@ public class StaffServiceImpl implements StaffService {
         if (save == null) {
             throw new RuntimeException("Failed to save staff");
         }
+    }
+
+    @Override
+    public StaffStatus getStaffById(String id) {
+        if (staffRepo.existsById(id)){
+            StaffEntity referenceById = staffRepo.getReferenceById(id);
+            return mapping.toStaffDTO(referenceById);
+        }
+        return new SelectedErrorStatusCode(2,"StaffNotFound");
     }
 }
