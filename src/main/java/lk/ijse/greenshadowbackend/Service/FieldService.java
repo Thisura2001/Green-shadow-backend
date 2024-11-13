@@ -11,4 +11,6 @@ public interface FieldService {
     FieldStatus getFieldById(String fieldId);
 
     List<FieldDto> getAllFields();
+
+    void DeleteFields(String fieldId);
 }

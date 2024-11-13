@@ -72,4 +72,20 @@ public class FieldController {
     public List<FieldDto> getAllField(){
         return fieldService.getAllFields();
     }
+    @DeleteMapping(value = "/{fieldId}")
+    public ResponseEntity<Void>DeleteField(@PathVariable ("fieldId") String fieldId){
+        try {
+            if (!Regex.fieldCodeMatcher(fieldId)){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            fieldService.DeleteFields(fieldId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (FieldNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
