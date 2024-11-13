@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class FieldServiceImpl implements FieldService {
@@ -36,5 +38,10 @@ public class FieldServiceImpl implements FieldService {
         }else {
             return new SelectedErrorStatusCode(2,"Field not found !!");
         }
+    }
+
+    @Override
+    public List<FieldDto> getAllFields() {
+        return mapping.toFieldDTOList(fieldRepo.findAll());
     }
 }

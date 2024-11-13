@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/field")
@@ -60,11 +61,15 @@ public class FieldController {
             }
     }
 
-    @GetMapping(path = "/{fieldId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{fieldId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FieldStatus getFieldById(@PathVariable ("fieldId") String fieldId){
         if (!Regex.fieldCodeMatcher(fieldId)){
             return new SelectedErrorStatusCode(1,"Field code not matched");
         }
         return fieldService.getFieldById(fieldId);
+    }
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<FieldDto> getAllField(){
+        return fieldService.getAllFields();
     }
 }
