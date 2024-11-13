@@ -9,10 +9,12 @@ import lk.ijse.greenshadowbackend.Service.StaffService;
 import lk.ijse.greenshadowbackend.Util.AppUtil;
 import lk.ijse.greenshadowbackend.Util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,5 +44,15 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<StaffDto> getAllStaff() {
          return mapping.toStaffDTOList(staffRepo.findAll());
+    }
+
+    @Override
+    public void deleteStaff(String id) {
+        Optional<StaffEntity> byId = staffRepo.findById(id);
+        if (!byId.isPresent()){
+            throw new RuntimeException("staff not found");
+        }else {
+            staffRepo.deleteById(id);
+        }
     }
 }

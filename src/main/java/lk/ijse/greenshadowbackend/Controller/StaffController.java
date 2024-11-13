@@ -44,4 +44,20 @@ public class StaffController {
     public List<StaffDto>getAllStaff(){
         return staffService.getAllStaff();
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>DeleteStaff(@PathVariable ("id") String id){
+       try {
+           if (!Regex.staffIdMatcher(id)){
+               return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+           }
+           staffService.deleteStaff(id);
+           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       }catch (StaffNotFoundException e){
+           e.printStackTrace();
+           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+       }catch (Exception e){
+           e.printStackTrace();
+           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+    }
 }

@@ -2,6 +2,7 @@ package lk.ijse.greenshadowbackend.Service;
 
 import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
 import lk.ijse.greenshadowbackend.Dto.StaffStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface StaffService {
     StaffStatus getStaffById(String id);
 
     List<StaffDto> getAllStaff();
+
+    void deleteStaff(String id);
 }
