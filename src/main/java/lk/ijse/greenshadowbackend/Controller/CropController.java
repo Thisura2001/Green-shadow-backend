@@ -4,9 +4,11 @@ import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.CropStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.CropDto;
 import lk.ijse.greenshadowbackend.Dto.Impl.FieldDto;
+import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
 import lk.ijse.greenshadowbackend.Exception.CropNotFoundException;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
 import lk.ijse.greenshadowbackend.Service.CropService;
+import lk.ijse.greenshadowbackend.Service.FieldService;
 import lk.ijse.greenshadowbackend.Util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ import java.util.List;
 public class CropController {
     @Autowired
     private CropService cropService;
+    @Autowired
+    private FieldService fieldService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveCrop(
@@ -32,8 +36,8 @@ public class CropController {
             @RequestPart("cropImg") MultipartFile cropImg,
             @RequestPart("category") String category,
             @RequestPart("season") String season,
-            @RequestBody FieldDto fieldDto
-            ) {
+            @RequestPart ("field") String field
+    ) {
         String cropBase64 = "";
 
         try {
@@ -47,9 +51,9 @@ public class CropController {
             cropDto.setCropImg(cropBase64);
             cropDto.setCategory(category);
             cropDto.setSeason(season);
-            cropDto.setFieldDto(fieldDto);
-
+            cropDto.setField(field);
             cropService.saveCrop(cropDto);
+            System.out.println(cropDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DataPersistException e) {
             e.printStackTrace();
@@ -59,6 +63,7 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping(value = "/{cropId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CropStatus getCropById(@PathVariable("cropId") String cropId) {
