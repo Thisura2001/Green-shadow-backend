@@ -13,6 +13,6 @@ public class EquipmentDto implements EquipmentStatus {
     private String id;
     private String name;
     private EquipmentType equipmentType;
-    private StaffDto assigned_staff;
-    private FieldDto assigned_field;
+    private StaffDto staff;
+    private FieldDto field;
 }
