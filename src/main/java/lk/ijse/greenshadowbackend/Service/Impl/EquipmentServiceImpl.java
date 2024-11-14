@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,5 +44,14 @@ public class EquipmentServiceImpl implements EquipmentService {
     public List<EquipmentDto> getAllEquipment() {
         List<EquipmentEntity> all = equipmentRepo.findAll();
         return mapping.toEquipmentDTOList(all);
+    }
+
+    @Override
+    public void deletEquipment(String eqId) {
+        Optional<EquipmentEntity> byId = equipmentRepo.findById(eqId);
+        if (!byId.isPresent()){
+            throw new RuntimeException("can't find Equipment");
+        }
+        equipmentRepo.deleteById(eqId);
     }
 }

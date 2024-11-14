@@ -4,6 +4,7 @@ import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.EquipmentStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.EquipmentDto;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
+import lk.ijse.greenshadowbackend.Exception.EquipmentNotFoundException;
 import lk.ijse.greenshadowbackend.Service.EquipmentService;
 import lk.ijse.greenshadowbackend.Service.StaffService;
 import lk.ijse.greenshadowbackend.Util.Regex;
@@ -43,5 +44,21 @@ public class EquipmentController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EquipmentDto>getAllEquipment(){
         return equipmentService.getAllEquipment();
+    }
+    @DeleteMapping(value = "/{eqId}")
+    public ResponseEntity<Void>DeleteEquipment(@PathVariable ("eqId") String eqId){
+        try {
+            if (!Regex.equipIdMatcher(eqId)){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            equipmentService.deletEquipment(eqId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (EquipmentNotFoundException e){
+            e.printStackTrace();
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
