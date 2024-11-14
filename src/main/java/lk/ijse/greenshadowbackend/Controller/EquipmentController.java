@@ -1,17 +1,19 @@
 package lk.ijse.greenshadowbackend.Controller;
 
+import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
+import lk.ijse.greenshadowbackend.Dto.EquipmentStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.EquipmentDto;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
 import lk.ijse.greenshadowbackend.Service.EquipmentService;
 import lk.ijse.greenshadowbackend.Service.StaffService;
+import lk.ijse.greenshadowbackend.Util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/equipment")
@@ -30,5 +32,16 @@ public class EquipmentController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @GetMapping(value = ("/{eqId}"),produces = MediaType.APPLICATION_JSON_VALUE)
+    public EquipmentStatus getEquipmentById(@PathVariable ("eqId") String eqId){
+        if (!Regex.equipIdMatcher(eqId)){
+            return new SelectedErrorStatusCode(1,"equipment not found");
+        }
+        return equipmentService.getEquipmentById(eqId);
+    }
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<EquipmentDto>getAllEquipment(){
+        return equipmentService.getAllEquipment();
     }
 }
