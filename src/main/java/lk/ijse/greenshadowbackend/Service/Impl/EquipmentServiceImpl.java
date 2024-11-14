@@ -54,4 +54,15 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
         equipmentRepo.deleteById(eqId);
     }
+
+    @Override
+    public void updateEquipment(String eqId, EquipmentDto equipmentDto) {
+        Optional<EquipmentEntity> byId = equipmentRepo.findById(eqId);
+        if (!byId.isPresent()){
+            throw new RuntimeException("can't find Equipment");
+        }else {
+            byId.get().setName(equipmentDto.getName());
+            byId.get().setEquipmentType(equipmentDto.getEquipmentType());
+        }
+    }
 }

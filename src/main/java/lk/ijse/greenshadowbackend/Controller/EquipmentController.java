@@ -61,4 +61,17 @@ public class EquipmentController {
             return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping(value = "/{eqId}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void>updateEquipment(@PathVariable ("eqId") String eqId,@RequestBody EquipmentDto equipmentDto){
+        try {
+            if (!Regex.equipIdMatcher(eqId)|| equipmentDto==null){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+                equipmentService.updateEquipment(eqId,equipmentDto);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+             }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
