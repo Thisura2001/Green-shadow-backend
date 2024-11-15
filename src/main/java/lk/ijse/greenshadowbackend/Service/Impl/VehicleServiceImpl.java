@@ -3,7 +3,9 @@ package lk.ijse.greenshadowbackend.Service.Impl;
 import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.Impl.VehicleDto;
 import lk.ijse.greenshadowbackend.Dto.VehicleStatus;
+import lk.ijse.greenshadowbackend.Entity.Impl.StaffEntity;
 import lk.ijse.greenshadowbackend.Entity.Impl.VehicleEntity;
+import lk.ijse.greenshadowbackend.Repository.StaffRepo;
 import lk.ijse.greenshadowbackend.Repository.VehicleRepo;
 import lk.ijse.greenshadowbackend.Service.VehicleService;
 import lk.ijse.greenshadowbackend.Util.AppUtil;
@@ -25,6 +27,8 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleRepo vehicleRepo;
     @Autowired
     private Mapping mapping;
+    @Autowired
+    private StaffRepo staffRepo;
     @Override
     public void saveVehicle(VehicleDto vehicleDto) {
         vehicleDto.setVehicle_code(AppUtil.generateVehicleId());
@@ -54,11 +58,13 @@ public class VehicleServiceImpl implements VehicleService {
         if (!byId.isPresent()){
             throw new RuntimeException("vehicle not found");
         }else {
+            StaffEntity staffEntity = staffRepo.findById(vehicleDto.getStaff())
+                    .orElseThrow(() -> new RuntimeException("Staff not found with ID: " + vehicleDto.getStaff()));
             byId.get().setLicensePlateNumber(vehicleDto.getLicensePlateNumber());
             byId.get().setVehicleCategory(vehicleDto.getVehicleCategory());
             byId.get().setFuelType(vehicleDto.getFuelType());
             byId.get().setStatus(vehicleDto.getStatus());
-//            byId.get().setStaff(vehicleDto.getStaff());
+            byId.get().setStaff(staffEntity);
         }
     }
 
