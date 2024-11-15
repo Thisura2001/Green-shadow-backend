@@ -26,8 +26,6 @@ import java.util.List;
 public class CropController {
     @Autowired
     private CropService cropService;
-    @Autowired
-    private FieldService fieldService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveCrop(

@@ -16,11 +16,11 @@ public class Mapping {
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
-    private FieldRepo fieldService;
+    private FieldRepo fieldRepo;
 
     //for crop mapping
     public CropEntity toCropEntity(CropDto cropDTO) {
-        FieldEntity fieldEntity = fieldService.findById(cropDTO.getField())
+        FieldEntity fieldEntity = fieldRepo.findById(cropDTO.getField())
                 .orElseThrow(() -> new RuntimeException("Field not found with ID: " + cropDTO.getField()));
 
         return new CropEntity(
