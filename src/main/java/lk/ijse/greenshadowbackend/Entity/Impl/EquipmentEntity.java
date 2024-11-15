@@ -2,6 +2,7 @@ package lk.ijse.greenshadowbackend.Entity.Impl;
 
 import jakarta.persistence.*;
 import lk.ijse.greenshadowbackend.Entity.EquipmentType;
+import lk.ijse.greenshadowbackend.Entity.Status;
 import lk.ijse.greenshadowbackend.Entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,8 @@ public class EquipmentEntity implements SuperEntity {
     private String name;
     @Enumerated(EnumType.STRING)
     private EquipmentType equipmentType;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @ManyToOne
     @JoinColumn(name = "id")
     private StaffEntity staff;

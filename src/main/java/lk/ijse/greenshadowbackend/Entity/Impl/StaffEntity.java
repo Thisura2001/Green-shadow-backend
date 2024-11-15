@@ -36,6 +36,8 @@ public class StaffEntity implements SuperEntity {
     private List<VehicleEntity> vehicles;
     @ManyToMany
     @JoinTable(name = "Field_Staff_assignment",joinColumns = @JoinColumn(name = "staff_id"),
-            inverseJoinColumns = @JoinColumn(name = "field_code"))
+            inverseJoinColumns = @JoinColumn(name = "fieldId"))
     private List<FieldEntity> fields;
+    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL)
+    private List<VehicleEntity> vehicle;
 }
