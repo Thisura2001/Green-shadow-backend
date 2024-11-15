@@ -71,8 +71,6 @@ public class CropServiceImpl implements CropService {
         }
 
         CropEntity cropEntity = cropOptional.get();
-
-        // Fetch the FieldEntity using the field ID from CropDto
         FieldEntity fieldEntity = fieldRepo.findById(cropDto.getField())
                 .orElseThrow(() -> new RuntimeException("Field not found with ID: " + cropDto.getField()));
 
@@ -82,9 +80,6 @@ public class CropServiceImpl implements CropService {
         cropEntity.setCropImg(cropDto.getCropImg());
         cropEntity.setCategory(cropDto.getCategory());
         cropEntity.setSeason(cropDto.getSeason());
-        cropEntity.setField(fieldEntity); // Set the FieldEntity here
-
-        // Save the updated CropEntity
-        cropRepo.save(cropEntity);
+        cropEntity.setField(fieldEntity);
     }
 }
