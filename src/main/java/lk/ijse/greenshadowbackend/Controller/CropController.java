@@ -51,6 +51,9 @@ public class CropController {
             cropDto.setCropImg(cropBase64);
             cropDto.setCategory(category);
             cropDto.setSeason(season);
+
+            FieldDto fieldDto = new FieldDto();
+            cropDto.setField(fieldDto.getFieldId());
             cropDto.setField(field);
             cropService.saveCrop(cropDto);
             System.out.println(cropDto);

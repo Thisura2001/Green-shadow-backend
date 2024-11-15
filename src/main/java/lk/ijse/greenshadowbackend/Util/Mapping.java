@@ -2,6 +2,8 @@ package lk.ijse.greenshadowbackend.Util;
 
 import lk.ijse.greenshadowbackend.Dto.Impl.*;
 import lk.ijse.greenshadowbackend.Entity.Impl.*;
+import lk.ijse.greenshadowbackend.Repository.FieldRepo;
+import lk.ijse.greenshadowbackend.Service.FieldService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,23 @@ import java.util.List;
 public class Mapping {
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private FieldRepo fieldService;
 
     //for crop mapping
     public CropEntity toCropEntity(CropDto cropDTO) {
-        return modelMapper.map(cropDTO, CropEntity.class);
-    }
+        FieldEntity fieldEntity = fieldService.findById(cropDTO.getField())
+                .orElseThrow(() -> new RuntimeException("Field not found with ID: " + cropDTO.getField()));
+
+        return new CropEntity(
+                cropDTO.getCropId(),
+                cropDTO.getCommonName(),
+                cropDTO.getScientificName(),
+                cropDTO.getCropImg(),
+                cropDTO.getCategory(),
+                cropDTO.getSeason(),
+                fieldEntity // Pass FieldEntity here
+        );    }
 
     public CropDto toCropDTO(CropEntity cropEntity) {
         return modelMapper.map(cropEntity, CropDto.class);
