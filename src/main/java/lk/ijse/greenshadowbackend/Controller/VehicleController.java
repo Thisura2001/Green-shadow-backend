@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/vehicle")
 public class VehicleController {
@@ -37,5 +39,9 @@ public class VehicleController {
             return new SelectedErrorStatusCode(1,"invalid vehicle code");
         }
         return vehicleService.getVehicleById(vehicle_code);
+    }
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<VehicleDto>getAllVehicle(){
+        return vehicleService.getAllVehicles();
     }
 }

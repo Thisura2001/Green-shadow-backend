@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class VehicleServiceImpl implements VehicleService {
@@ -35,5 +37,10 @@ public class VehicleServiceImpl implements VehicleService {
             return mapping.toVehicleDTO(referenceById);
         }
         return new SelectedErrorStatusCode(2,"Vehicle not found");
+    }
+
+    @Override
+    public List<VehicleDto> getAllVehicles() {
+        return mapping.toVehicleDTOList(vehicleRepo.findAll());
     }
 }
