@@ -2,7 +2,9 @@ package lk.ijse.greenshadowbackend.Util;
 
 import lk.ijse.greenshadowbackend.Dto.Impl.*;
 import lk.ijse.greenshadowbackend.Entity.Impl.*;
+import lk.ijse.greenshadowbackend.Repository.EquipmentRepo;
 import lk.ijse.greenshadowbackend.Repository.FieldRepo;
+import lk.ijse.greenshadowbackend.Repository.StaffRepo;
 import lk.ijse.greenshadowbackend.Service.FieldService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -17,6 +19,8 @@ public class Mapping {
     private ModelMapper modelMapper;
     @Autowired
     private FieldRepo fieldRepo;
+    @Autowired
+    private StaffRepo staffRepo;
 
     //for crop mapping
     public CropEntity toCropEntity(CropDto cropDTO) {
@@ -43,7 +47,19 @@ public class Mapping {
 
     //for equipment mapping
     public EquipmentEntity toEquipmentEntity(EquipmentDto equipmentDTO) {
-        return modelMapper.map(equipmentDTO, EquipmentEntity.class);
+        FieldEntity fieldEntity = fieldRepo.findById(equipmentDTO.getField())
+                .orElseThrow(() -> new RuntimeException("Field not found with ID: " + equipmentDTO.getField()));
+        StaffEntity staffEntity = staffRepo.findById(equipmentDTO.getStaff())
+                .orElseThrow(() -> new RuntimeException("Staff not found with ID: " + equipmentDTO.getStaff()));
+
+        return new EquipmentEntity(
+                equipmentDTO.getEqId(),
+                equipmentDTO.getName(),
+                equipmentDTO.getEquipmentType(),
+                equipmentDTO.getStatus(),
+                staffEntity, // Pass StaffEntity here
+                fieldEntity // Pass FieldEntity here
+        );
     }
     public EquipmentDto toEquipmentDTO(EquipmentEntity equipmentEntity) {
         return modelMapper.map(equipmentEntity, EquipmentDto.class);

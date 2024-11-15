@@ -4,7 +4,11 @@ import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.EquipmentStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.EquipmentDto;
 import lk.ijse.greenshadowbackend.Entity.Impl.EquipmentEntity;
+import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
+import lk.ijse.greenshadowbackend.Entity.Impl.StaffEntity;
 import lk.ijse.greenshadowbackend.Repository.EquipmentRepo;
+import lk.ijse.greenshadowbackend.Repository.FieldRepo;
+import lk.ijse.greenshadowbackend.Repository.StaffRepo;
 import lk.ijse.greenshadowbackend.Service.EquipmentService;
 import lk.ijse.greenshadowbackend.Util.AppUtil;
 import lk.ijse.greenshadowbackend.Util.Mapping;
@@ -22,6 +26,10 @@ public class EquipmentServiceImpl implements EquipmentService {
     private EquipmentRepo equipmentRepo;
     @Autowired
     private Mapping mapping;
+    @Autowired
+    private FieldRepo fieldRepo;
+    @Autowired
+    private StaffRepo staffRepo;
     @Override
     public void saveEquipment(EquipmentDto equipmentDto) {
         equipmentDto.setEqId(AppUtil.generateEquipmentId());
@@ -61,8 +69,16 @@ public class EquipmentServiceImpl implements EquipmentService {
         if (!byId.isPresent()){
             throw new RuntimeException("can't find Equipment");
         }else {
+            FieldEntity fieldEntity = fieldRepo.findById(equipmentDto.getField())
+                    .orElseThrow(() -> new RuntimeException("Field not found with ID: " + equipmentDto.getField()));
+            StaffEntity staffEntity = staffRepo.findById(equipmentDto.getStaff())
+                    .orElseThrow(() -> new RuntimeException("Staff not found with ID: " + equipmentDto.getStaff()));
+
             byId.get().setName(equipmentDto.getName());
             byId.get().setEquipmentType(equipmentDto.getEquipmentType());
+            byId.get().setStatus(equipmentDto.getStatus());
+            byId.get().setField(fieldEntity);
+            byId.get().setStaff(staffEntity);
         }
     }
 }
