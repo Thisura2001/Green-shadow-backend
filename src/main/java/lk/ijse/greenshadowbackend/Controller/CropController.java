@@ -49,9 +49,6 @@ public class CropController {
             cropDto.setCropImg(cropBase64);
             cropDto.setCategory(category);
             cropDto.setSeason(season);
-
-            FieldDto fieldDto = new FieldDto();
-            cropDto.setField(fieldDto.getFieldId());
             cropDto.setField(field);
             cropService.saveCrop(cropDto);
             System.out.println(cropDto);
@@ -103,7 +100,8 @@ public class CropController {
                                            @RequestPart("scientificName") String scientificName,
                                            @RequestPart("cropImg") MultipartFile cropImg,
                                            @RequestPart("category") String category,
-                                           @RequestPart("season") String season
+                                           @RequestPart("season") String season,
+                                           @RequestPart ("field") String field
     ) {
         String cropBase64 = "";
         try {
@@ -116,6 +114,7 @@ public class CropController {
             cropDto.setCropImg(cropBase64);
             cropDto.setCategory(category);
             cropDto.setSeason(season);
+            cropDto.setField(field);
             cropService.updateCrop(cropId, cropDto);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (DataPersistException e) {

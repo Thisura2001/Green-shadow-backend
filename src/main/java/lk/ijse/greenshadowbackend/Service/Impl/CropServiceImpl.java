@@ -4,8 +4,10 @@ import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.CropStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.CropDto;
 import lk.ijse.greenshadowbackend.Entity.Impl.CropEntity;
+import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
 import lk.ijse.greenshadowbackend.Exception.CropNotFoundException;
 import lk.ijse.greenshadowbackend.Repository.CropRepo;
+import lk.ijse.greenshadowbackend.Repository.FieldRepo;
 import lk.ijse.greenshadowbackend.Service.CropService;
 import lk.ijse.greenshadowbackend.Util.AppUtil;
 import lk.ijse.greenshadowbackend.Util.Mapping;
@@ -22,23 +24,26 @@ public class CropServiceImpl implements CropService {
     @Autowired
     private CropRepo cropRepo;
     @Autowired
+    private FieldRepo fieldRepo;
+    @Autowired
     private Mapping mapper;
+
     @Override
     public void saveCrop(CropDto cropDto) {
         cropDto.setCropId(AppUtil.generateCropId());
         CropEntity save = cropRepo.save(mapper.toCropEntity(cropDto));
-        if (save==null){
+        if (save == null) {
             throw new RuntimeException("Crop Save Failed");
         }
     }
 
     @Override
     public CropStatus getCropById(String cropId) {
-        if (cropRepo.existsById(cropId)){
+        if (cropRepo.existsById(cropId)) {
             CropEntity referenceById = cropRepo.getReferenceById(cropId);
             return mapper.toCropDTO(referenceById);
-        }else {
-            return new SelectedErrorStatusCode(2,"Crop does not exist!!");
+        } else {
+            return new SelectedErrorStatusCode(2, "Crop does not exist!!");
         }
     }
 
@@ -50,24 +55,36 @@ public class CropServiceImpl implements CropService {
     @Override
     public void deleteCrop(String cropId) {
         Optional<CropEntity> byId = cropRepo.findById(cropId);
-        if (!byId.isPresent()){
+        if (!byId.isPresent()) {
             throw new CropNotFoundException("crop not found!!");
-        }else {
+        } else {
             cropRepo.deleteById(cropId);
         }
     }
 
     @Override
     public void updateCrop(String cropId, CropDto cropDto) {
-        Optional<CropEntity> byId = cropRepo.findById(cropId);
-        if (!byId.isPresent()){
-            throw new CropNotFoundException("Crp not found !!");
-        }else {
-            byId.get().setCommonName(cropDto.getCommonName());
-            byId.get().setScientificName(cropDto.getScientificName());
-            byId.get().setCropImg(cropDto.getCropImg());
-            byId.get().setCategory(cropDto.getCategory());
-            byId.get().setSeason(cropDto.getSeason());
+        Optional<CropEntity> cropOptional = cropRepo.findById(cropId);
+
+        if (!cropOptional.isPresent()) {
+            throw new CropNotFoundException("Crop not found!");
         }
+
+        CropEntity cropEntity = cropOptional.get();
+
+        // Fetch the FieldEntity using the field ID from CropDto
+        FieldEntity fieldEntity = fieldRepo.findById(cropDto.getField())
+                .orElseThrow(() -> new RuntimeException("Field not found with ID: " + cropDto.getField()));
+
+        // Update the cropEntity fields
+        cropEntity.setCommonName(cropDto.getCommonName());
+        cropEntity.setScientificName(cropDto.getScientificName());
+        cropEntity.setCropImg(cropDto.getCropImg());
+        cropEntity.setCategory(cropDto.getCategory());
+        cropEntity.setSeason(cropDto.getSeason());
+        cropEntity.setField(fieldEntity); // Set the FieldEntity here
+
+        // Save the updated CropEntity
+        cropRepo.save(cropEntity);
     }
 }
