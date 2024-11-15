@@ -61,4 +61,13 @@ public class VehicleServiceImpl implements VehicleService {
 //            byId.get().setStaff(vehicleDto.getStaff());
         }
     }
+
+    @Override
+    public void deleteVehicle(String vehicleCode) {
+        Optional<VehicleEntity> byId = vehicleRepo.findById(vehicleCode);
+        if (!byId.isPresent()){
+            throw new RuntimeException("Vehicle Not Found");
+        }
+        vehicleRepo.deleteById(vehicleCode);
+    }
 }

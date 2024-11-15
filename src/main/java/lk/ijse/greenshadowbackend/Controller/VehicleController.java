@@ -4,6 +4,7 @@ import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.Impl.VehicleDto;
 import lk.ijse.greenshadowbackend.Dto.VehicleStatus;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
+import lk.ijse.greenshadowbackend.Exception.VehicleNotFoundException;
 import lk.ijse.greenshadowbackend.Service.VehicleService;
 import lk.ijse.greenshadowbackend.Util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,22 @@ public class VehicleController {
         }catch (DataPersistException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping(value = "/{vehicle_code}")
+    public ResponseEntity<Void>deleteVehicle(@PathVariable ("vehicle_code") String vehicle_code){
+        try {
+            if (!Regex.vehicleCodeMatcher(vehicle_code)){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            vehicleService.deleteVehicle(vehicle_code);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (VehicleNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
