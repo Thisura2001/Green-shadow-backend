@@ -44,4 +44,20 @@ public class VehicleController {
     public List<VehicleDto>getAllVehicle(){
         return vehicleService.getAllVehicles();
     }
+    @PutMapping(value = "/{vehicle_code}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void>updateVehicle(@PathVariable ("vehicle_code") String vehicle_code,@RequestBody VehicleDto vehicleDto){
+        try {
+            if (!Regex.vehicleCodeMatcher(vehicle_code)||vehicleDto == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            vehicleService.updateVehicle(vehicle_code,vehicleDto);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (DataPersistException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
