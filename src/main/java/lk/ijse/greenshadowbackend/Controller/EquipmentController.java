@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/equipment")
+@CrossOrigin
 public class EquipmentController {
     @Autowired
     private EquipmentService equipmentService;
