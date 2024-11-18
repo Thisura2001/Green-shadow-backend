@@ -11,6 +11,7 @@ import lk.ijse.greenshadowbackend.Service.FieldService;
 import lk.ijse.greenshadowbackend.Util.AppUtil;
 import lk.ijse.greenshadowbackend.Util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,5 +71,10 @@ public class FieldServiceImpl implements FieldService {
            byId.get().setFieldImg1(fieldDto.getFieldImg1());
            byId.get().setFieldImg2(fieldDto.getFieldImg2());
         }
+    }
+
+    @Override
+    public FieldEntity getFieldByName(String fieldName) {
+        return fieldRepo.findByFieldName(fieldName);
     }
 }
