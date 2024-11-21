@@ -2,9 +2,11 @@ package lk.ijse.greenshadowbackend.Repository;
 
 import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FieldRepo extends JpaRepository<FieldEntity,String> {
-    FieldEntity findByFieldName(String fieldName);
+    @Query(value = "SELECT * FROM field WHERE fieldId = (SELECT fieldId FROM field ORDER BY CAST(SUBSTRING(fieldId, 7) AS UNSIGNED) DESC LIMIT 1);", nativeQuery = true)
+    FieldEntity findLastRowNative();
 }

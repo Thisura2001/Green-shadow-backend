@@ -110,17 +110,17 @@ public class Mapping {
     }
 
     //for user mapping
-    public UserEntity toUserEntity(UserDto userDTO) {
-        return modelMapper.map(userDTO, UserEntity.class);
-    }
-
-    public UserDto toUserDTO(UserEntity userEntity) {
-        return modelMapper.map(userEntity, UserDto.class);
-    }
-
-    public List<UserDto> toUserDTOList(List<UserEntity> userEntitiesList) {
-        return modelMapper.map(userEntitiesList,new TypeToken<List<UserDto>>() {}.getType());
-    }
+//    public UserEntity toUserEntity(UserDto userDTO) {
+//        return modelMapper.map(userDTO, UserEntity.class);
+//    }
+//
+//    public UserDto toUserDTO(UserEntity userEntity) {
+//        return modelMapper.map(userEntity, UserDto.class);
+//    }
+//
+//    public List<UserDto> toUserDTOList(List<UserEntity> userEntitiesList) {
+//        return modelMapper.map(userEntitiesList,new TypeToken<List<UserDto>>() {}.getType());
+//    }
 
     //for vehicle mapping
     public VehicleEntity toVehicleEntity(VehicleDto vehicleDTO) {
