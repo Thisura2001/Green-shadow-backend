@@ -24,11 +24,15 @@ public class LogServiceImpl implements LogService {
     private Mapping mapping;
     @Override
     public void saveLog(LogDto logDto) {
-        logDto.setId(AppUtil.generateLogId());
-        LogEntity save = logRepo.save(mapping.toMonitoringLogEntity(logDto));
-        if (save==null){
-            throw new RuntimeException("Log Save Failed");
+        int number = 0;
+        LogEntity log = logRepo.findLastRowNative();
+        if (log != null){
+            String[] parts = log.getId().split("-");
+            number = Integer.parseInt(parts[1]);
         }
+        logDto.setId("LOG-"+(number+1));
+        log = mapping.toMonitoringLogEntity(logDto);
+        logRepo.save(log);
     }
 
     @Override

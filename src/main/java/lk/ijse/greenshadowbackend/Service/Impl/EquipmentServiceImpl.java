@@ -32,11 +32,15 @@ public class EquipmentServiceImpl implements EquipmentService {
     private StaffRepo staffRepo;
     @Override
     public void saveEquipment(EquipmentDto equipmentDto) {
-        equipmentDto.setEqId(AppUtil.generateEquipmentId());
-        EquipmentEntity save = equipmentRepo.save(mapping.toEquipmentEntity(equipmentDto));
-        if (save == null) {
-            throw new RuntimeException("Failed to save equipment");
+        int number = 0;
+        EquipmentEntity equipment = equipmentRepo.findLastRowNative();
+        if (equipment != null){
+            String[] parts = equipment.getEqId().split("-");
+            number = Integer.parseInt(parts[1]);
         }
+        equipmentDto.setEqId("EQUIPMENT-"+(number+1));
+        equipment = mapping.toEquipmentEntity(equipmentDto);
+        equipmentRepo.save(equipment);
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,18 +31,32 @@ public class CropServiceImpl implements CropService {
 
     @Override
     public void saveCrop(CropDto cropDto) {
-        cropDto.setCropId(AppUtil.generateCropId());
-        CropEntity save = cropRepo.save(mapper.toCropEntity(cropDto));
-        if (save == null) {
-            throw new RuntimeException("Crop Save Failed");
+        int number = 0;
+        CropEntity crop = cropRepo.findLastRowNative();
+        if (crop != null) {
+            String[] parts = crop.getCropId().split("-");
+            number = Integer.parseInt(parts[1]);
         }
+        cropDto.setCropId("CROP-" + (number + 1));
+        crop = mapper.toCropEntity(cropDto);
+        cropRepo.save(crop);
     }
 
     @Override
     public CropStatus getCropById(String cropId) {
         if (cropRepo.existsById(cropId)) {
             CropEntity referenceById = cropRepo.getReferenceById(cropId);
-            return mapper.toCropDTO(referenceById);
+
+            CropDto cropDto = new CropDto();
+            cropDto.setCropId(referenceById.getCropId());
+            cropDto.setCommonName(referenceById.getCommonName());
+            cropDto.setScientificName(referenceById.getScientificName());
+            cropDto.setCropImg(referenceById.getCropImg());
+            cropDto.setCategory(referenceById.getCategory());
+            cropDto.setSeason(referenceById.getSeason());
+            cropDto.setField(referenceById.getField().getFieldId());
+
+            return cropDto;
         } else {
             return new SelectedErrorStatusCode(2, "Crop does not exist!!");
         }
@@ -49,8 +64,24 @@ public class CropServiceImpl implements CropService {
 
     @Override
     public List<CropDto> getAllCrops() {
-        return mapper.toCropDTOList(cropRepo.findAll());
+        List<CropEntity> cropEntities = cropRepo.findAll();
+        List<CropDto> cropDtos = new ArrayList<>();
+
+        for (CropEntity cropEntity : cropEntities) {
+            CropDto cropDto = new CropDto();
+            cropDto.setCropId(cropEntity.getCropId());
+            cropDto.setCommonName(cropEntity.getCommonName());
+            cropDto.setScientificName(cropEntity.getScientificName());
+            cropDto.setCropImg(cropEntity.getCropImg());
+            cropDto.setCategory(cropEntity.getCategory());
+            cropDto.setSeason(cropEntity.getSeason());
+            cropDto.setField(cropEntity.getField().getFieldId());
+            cropDtos.add(cropDto);
+        }
+
+        return cropDtos;
     }
+
 
     @Override
     public void deleteCrop(String cropId) {
@@ -74,7 +105,6 @@ public class CropServiceImpl implements CropService {
         FieldEntity fieldEntity = fieldRepo.findById(cropDto.getField())
                 .orElseThrow(() -> new RuntimeException("Field not found with ID: " + cropDto.getField()));
 
-        // Update the cropEntity fields
         cropEntity.setCommonName(cropDto.getCommonName());
         cropEntity.setScientificName(cropDto.getScientificName());
         cropEntity.setCropImg(cropDto.getCropImg());
@@ -82,4 +112,5 @@ public class CropServiceImpl implements CropService {
         cropEntity.setSeason(cropDto.getSeason());
         cropEntity.setField(fieldEntity);
     }
+
 }

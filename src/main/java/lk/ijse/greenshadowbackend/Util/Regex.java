@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Regex {
     public static Matcher idValidator(String id){
-        return Pattern.compile("\\b(?:MEMBER|FIELD|CROP|EQUIPMENT|VEHICLE|LOG|STEQDET)-\\d+\\b").matcher(id);
+        return Pattern.compile("\\b(?:STAFF|FIELD|CROP|EQUIPMENT|VEHICLE|LOG|STEQDET)-\\d+\\b").matcher(id);
     }
 
 //    public static boolean cropCodeMatcher(String cropCode) {

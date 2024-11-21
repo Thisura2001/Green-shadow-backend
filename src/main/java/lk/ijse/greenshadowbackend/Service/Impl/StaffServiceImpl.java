@@ -26,11 +26,15 @@ public class StaffServiceImpl implements StaffService {
     private Mapping mapping;
     @Override
     public void saveStaff(StaffDto staffDto) {
-        staffDto.setId(AppUtil.generateStaffId());
-        StaffEntity save = staffRepo.save(mapping.toStaffEntity(staffDto));
-        if (save == null) {
-            throw new RuntimeException("Failed to save staff");
+        int number = 0;
+        StaffEntity staff = staffRepo.findLastRowNative();
+        if (staff != null){
+            String[] parts = staff.getId().split("-");
+            number = Integer.parseInt(parts[1]);
         }
+        staffDto.setId("STAFF-"+(number+1));
+        staff = mapping.toStaffEntity(staffDto);
+        staffRepo.save(staff);
     }
 
     @Override

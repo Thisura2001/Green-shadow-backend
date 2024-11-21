@@ -35,8 +35,9 @@ public class Mapping {
                 cropDTO.getCropImg(),
                 cropDTO.getCategory(),
                 cropDTO.getSeason(),
-                fieldEntity // Pass FieldEntity here
-        );    }
+                fieldEntity
+        );
+    }
 
     public CropDto toCropDTO(CropEntity cropEntity) {
         return modelMapper.map(cropEntity, CropDto.class);

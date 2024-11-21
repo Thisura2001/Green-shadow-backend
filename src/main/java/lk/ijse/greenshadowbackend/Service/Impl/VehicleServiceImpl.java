@@ -31,11 +31,15 @@ public class VehicleServiceImpl implements VehicleService {
     private StaffRepo staffRepo;
     @Override
     public void saveVehicle(VehicleDto vehicleDto) {
-        vehicleDto.setVehicle_code(AppUtil.generateVehicleId());
-        VehicleEntity save = vehicleRepo.save(mapping.toVehicleEntity(vehicleDto));
-        if (save == null) {
-            throw new RuntimeException("Failed to save vehicle");
+        int number = 0;
+        VehicleEntity vehicle = vehicleRepo.findLastRowNative();
+        if (vehicle != null){
+            String[] parts = vehicle.getVehicle_code().split("-");
+            number = Integer.parseInt(parts[1]);
         }
+        vehicleDto.setVehicle_code("VEHICLE-"+(number+1));
+        vehicle = mapping.toVehicleEntity(vehicleDto);
+        vehicleRepo.save(vehicle);
     }
 
     @Override
