@@ -52,7 +52,7 @@ public class LogController {
     }
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public LogStatus getLogById(@PathVariable ("id") String id){
-        if (!Regex.logCodeMatcher(id)){
+        if (!Regex.idValidator(id).matches()){
             return new SelectedErrorStatusCode(1,"Log not found");
         }
         return logService.getLogById(id);
@@ -91,7 +91,7 @@ public class LogController {
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void>deleteLog(@PathVariable ("id") String id){
         try {
-            if (!Regex.logCodeMatcher(id)){
+            if (!Regex.idValidator(id).matches()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             logService.deleteLog(id);

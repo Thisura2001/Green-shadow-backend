@@ -37,7 +37,7 @@ public class EquipmentController {
     }
     @GetMapping(value = ("/{eqId}"),produces = MediaType.APPLICATION_JSON_VALUE)
     public EquipmentStatus getEquipmentById(@PathVariable ("eqId") String eqId){
-        if (!Regex.equipIdMatcher(eqId)){
+        if (!Regex.idValidator(eqId).matches()){
             return new SelectedErrorStatusCode(1,"equipment not found");
         }
         return equipmentService.getEquipmentById(eqId);
@@ -49,7 +49,7 @@ public class EquipmentController {
     @DeleteMapping(value = "/{eqId}")
     public ResponseEntity<Void>DeleteEquipment(@PathVariable ("eqId") String eqId){
         try {
-            if (!Regex.equipIdMatcher(eqId)){
+            if (!Regex.idValidator(eqId).matches()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             equipmentService.deletEquipment(eqId);
@@ -65,7 +65,7 @@ public class EquipmentController {
     @PutMapping(value = "/{eqId}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void>updateEquipment(@PathVariable ("eqId") String eqId,@RequestBody EquipmentDto equipmentDto){
         try {
-            if (!Regex.equipIdMatcher(eqId)|| equipmentDto==null){
+            if (!Regex.idValidator(eqId).matches()|| equipmentDto==null){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
                 equipmentService.updateEquipment(eqId,equipmentDto);

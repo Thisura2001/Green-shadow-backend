@@ -65,7 +65,7 @@ public class FieldController {
 
     @GetMapping(value = "/{fieldId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FieldStatus getFieldById(@PathVariable ("fieldId") String fieldId){
-        if (!Regex.fieldCodeMatcher(fieldId)){
+        if (!Regex.idValidator(fieldId).matches()){
             return new SelectedErrorStatusCode(1,"Field code not matched");
         }
         return fieldService.getFieldById(fieldId);
@@ -77,7 +77,7 @@ public class FieldController {
     @DeleteMapping(value = "/{fieldId}")
     public ResponseEntity<Void>DeleteField(@PathVariable ("fieldId") String fieldId){
         try {
-            if (!Regex.fieldCodeMatcher(fieldId)){
+            if (!Regex.idValidator(fieldId).matches()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             fieldService.DeleteFields(fieldId);

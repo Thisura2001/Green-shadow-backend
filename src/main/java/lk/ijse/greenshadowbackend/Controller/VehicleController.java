@@ -37,7 +37,7 @@ public class VehicleController {
     }
     @GetMapping(value = "/{vehicle_code}",produces = MediaType.APPLICATION_JSON_VALUE)
     public VehicleStatus getVehicleById(@PathVariable ("vehicle_code") String vehicle_code){
-        if (!Regex.vehicleCodeMatcher(vehicle_code)){
+        if (!Regex.idValidator(vehicle_code).matches()){
             return new SelectedErrorStatusCode(1,"invalid vehicle code");
         }
         return vehicleService.getVehicleById(vehicle_code);
@@ -49,7 +49,7 @@ public class VehicleController {
     @PutMapping(value = "/{vehicle_code}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void>updateVehicle(@PathVariable ("vehicle_code") String vehicle_code,@RequestBody VehicleDto vehicleDto){
         try {
-            if (!Regex.vehicleCodeMatcher(vehicle_code)||vehicleDto == null){
+            if (!Regex.idValidator(vehicle_code).matches()||vehicleDto == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             vehicleService.updateVehicle(vehicle_code,vehicleDto);
@@ -65,7 +65,7 @@ public class VehicleController {
     @DeleteMapping(value = "/{vehicle_code}")
     public ResponseEntity<Void>deleteVehicle(@PathVariable ("vehicle_code") String vehicle_code){
         try {
-            if (!Regex.vehicleCodeMatcher(vehicle_code)){
+            if (!Regex.idValidator(vehicle_code).matches()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             vehicleService.deleteVehicle(vehicle_code);

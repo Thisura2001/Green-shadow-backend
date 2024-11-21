@@ -63,7 +63,7 @@ public class CropController {
 
     @GetMapping(value = "/{cropId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CropStatus getCropById(@PathVariable("cropId") String cropId) {
-        if (!Regex.cropCodeMatcher(cropId)) {
+        if (!Regex.idValidator(cropId).matches()) {
             return new SelectedErrorStatusCode(1, "Invalid Crop Id");
         }
         return cropService.getCropById(cropId);
@@ -77,7 +77,7 @@ public class CropController {
     @DeleteMapping(value = "/{cropId}")
     public ResponseEntity<Void> deleteCrop(@PathVariable("cropId") String cropId) {
         try {
-            if (!Regex.cropCodeMatcher(cropId)) {
+            if (!Regex.idValidator(cropId).matches()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             cropService.deleteCrop(cropId);

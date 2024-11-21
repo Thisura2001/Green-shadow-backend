@@ -36,7 +36,7 @@ public class StaffController {
     }
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public StaffStatus getStaffById(@PathVariable ("id") String id){
-        if (!Regex.staffIdMatcher(id)){
+        if (!Regex.idValidator(id).matches()){
             return new SelectedErrorStatusCode(1,"Staff not found");
         }
         return staffService.getStaffById(id);
@@ -48,7 +48,7 @@ public class StaffController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>DeleteStaff(@PathVariable ("id") String id){
        try {
-           if (!Regex.staffIdMatcher(id)){
+           if (!Regex.idValidator(id).matches()){
                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
            }
            staffService.deleteStaff(id);
@@ -64,7 +64,7 @@ public class StaffController {
     @PutMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void>updateStaff(@PathVariable String id,@RequestBody StaffDto staffDto){
         try {
-            if (!Regex.staffIdMatcher(id)|| staffDto == null){
+            if (!Regex.idValidator(id).matches()|| staffDto == null){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             staffService.updateStaff(id,staffDto);
