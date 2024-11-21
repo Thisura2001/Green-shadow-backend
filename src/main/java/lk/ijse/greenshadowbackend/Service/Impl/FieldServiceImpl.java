@@ -72,9 +72,4 @@ public class FieldServiceImpl implements FieldService {
            byId.get().setFieldImg2(fieldDto.getFieldImg2());
         }
     }
-
-    @Override
-    public FieldEntity getFieldByName(String fieldName) {
-        return fieldRepo.findByFieldName(fieldName);
-    }
 }

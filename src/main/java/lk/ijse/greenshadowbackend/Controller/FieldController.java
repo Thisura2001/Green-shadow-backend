@@ -128,14 +128,4 @@ public class FieldController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/{fieldName}")
-    public ResponseEntity<?> getFieldByName(@PathVariable String fieldName) {
-        try {
-            FieldEntity field = fieldService.getFieldByName(fieldName); // Get field by name
-            return ResponseEntity.ok(field); // Return the full field data including generated fieldId
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Field not found with name: " + fieldName);
-        }
-    }
 }

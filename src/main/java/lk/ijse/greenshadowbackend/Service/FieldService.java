@@ -17,6 +17,4 @@ public interface FieldService {
     void DeleteFields(String fieldId);
 
     void updateField(FieldDto fieldDto);
-
-    FieldEntity getFieldByName(String fieldName);
 }
