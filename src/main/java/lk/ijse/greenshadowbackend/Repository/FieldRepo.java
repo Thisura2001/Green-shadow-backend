@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FieldRepo extends JpaRepository<FieldEntity,String> {
-    @Query(value = "SELECT * FROM field WHERE fieldId = (SELECT fieldId FROM field ORDER BY CAST(SUBSTRING(fieldId, 7) AS UNSIGNED) DESC LIMIT 1);", nativeQuery = true)
+    @Query(value = "SELECT * FROM field WHERE field_id = (SELECT field_id FROM field ORDER BY CAST(SUBSTRING(field_id, 7) AS UNSIGNED) DESC LIMIT 1);", nativeQuery = true)
     FieldEntity findLastRowNative();
 }

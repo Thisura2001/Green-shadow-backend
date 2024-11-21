@@ -27,11 +27,15 @@ public class FieldServiceImpl implements FieldService {
     private Mapping mapping;
     @Override
     public void saveField(FieldDto fieldDto) {
-        fieldDto.setFieldId(AppUtil.generateFieldId());
-        FieldEntity save = fieldRepo.save(mapping.toFieldEntity(fieldDto));
-        if (save==null){
-            throw new RuntimeException("Field Save Failed");
-        }
+       int number = 0;
+       FieldEntity field = fieldRepo.findLastRowNative();
+       if (field!=null){
+           String[] parts = field.getFieldId().split("-");
+           number = Integer.parseInt(parts[1]);
+       }
+       fieldDto.setFieldId("FIELD-"+(number+1));
+       field = mapping.toFieldEntity(fieldDto);
+       fieldRepo.save(field);
     }
 
     @Override
