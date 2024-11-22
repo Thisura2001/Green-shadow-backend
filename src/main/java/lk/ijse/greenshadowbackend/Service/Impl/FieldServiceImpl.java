@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,40 +41,64 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public FieldStatus getFieldById(String fieldId) {
-        if (fieldRepo.existsById(fieldId)){
-            FieldEntity referenceById = fieldRepo.getReferenceById(fieldId);
-            return mapping.toFieldDTO(referenceById);
-        }else {
-            return new SelectedErrorStatusCode(2,"Field not found !!");
+        if (fieldRepo.existsById(fieldId)) {
+            FieldEntity fieldEntity = fieldRepo.getReferenceById(fieldId);
+            FieldDto fieldDto = new FieldDto();
+            fieldDto.setFieldId(fieldEntity.getFieldId());
+            fieldDto.setFieldName(fieldEntity.getFieldName());
+            fieldDto.setLocation(fieldEntity.getLocation());
+            fieldDto.setExtend(fieldEntity.getExtend());
+            fieldDto.setFieldImg1(fieldEntity.getFieldImg1());
+            fieldDto.setFieldImg2(fieldEntity.getFieldImg2());
+            return fieldDto;
+        } else {
+            return new SelectedErrorStatusCode(2, "Field not found !!");
         }
     }
 
     @Override
     public List<FieldDto> getAllFields() {
-        return mapping.toFieldDTOList(fieldRepo.findAll());
+        List<FieldEntity> fieldEntities = fieldRepo.findAll();
+        List<FieldDto> fieldDtos = new ArrayList<>();
+
+        for (FieldEntity entity : fieldEntities) {
+            FieldDto dto = new FieldDto();
+            dto.setFieldId(entity.getFieldId());
+            dto.setFieldName(entity.getFieldName());
+            dto.setLocation(entity.getLocation());
+            dto.setExtend(entity.getExtend());
+            dto.setFieldImg1(entity.getFieldImg1());
+            dto.setFieldImg2(entity.getFieldImg2());
+            fieldDtos.add(dto);
+        }
+
+        return fieldDtos;
     }
 
     @Override
     public void DeleteFields(String fieldId) {
-        Optional<FieldEntity> byId = fieldRepo.findById(fieldId);
-        if (!byId.isPresent()){
+        Optional<FieldEntity> optionalField = fieldRepo.findById(fieldId);
+        if (!optionalField.isPresent()) {
             throw new FieldNotFoundException("Can't find Field");
-        }else {
+        } else {
             fieldRepo.deleteById(fieldId);
         }
     }
 
     @Override
     public void updateField(FieldDto fieldDto) {
-        Optional<FieldEntity> byId = fieldRepo.findById(fieldDto.getFieldId());
-        if (!byId.isPresent()){
+        Optional<FieldEntity> optionalField = fieldRepo.findById(fieldDto.getFieldId());
+        if (!optionalField.isPresent()) {
             throw new FieldNotFoundException("Can't find Field");
-        }else {
-           byId.get().setFieldName(fieldDto.getFieldName());
-           byId.get().setLocation(fieldDto.getLocation());
-           byId.get().setExtend(fieldDto.getExtend());
-           byId.get().setFieldImg1(fieldDto.getFieldImg1());
-           byId.get().setFieldImg2(fieldDto.getFieldImg2());
+        } else {
+            FieldEntity fieldEntity = optionalField.get();
+            fieldEntity.setFieldName(fieldDto.getFieldName());
+            fieldEntity.setLocation(fieldDto.getLocation());
+            fieldEntity.setExtend(fieldDto.getExtend());
+            fieldEntity.setFieldImg1(fieldDto.getFieldImg1());
+            fieldEntity.setFieldImg2(fieldDto.getFieldImg2());
+            fieldRepo.save(fieldEntity); // Save updated entity back to the repository
         }
     }
+
 }
