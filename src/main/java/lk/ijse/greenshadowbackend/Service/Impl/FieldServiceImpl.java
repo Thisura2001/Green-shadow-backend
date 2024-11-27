@@ -95,8 +95,13 @@ public class FieldServiceImpl implements FieldService {
             fieldEntity.setFieldName(fieldDto.getFieldName());
             fieldEntity.setLocation(fieldDto.getLocation());
             fieldEntity.setExtend(fieldDto.getExtend());
-            fieldEntity.setFieldImg1(fieldDto.getFieldImg1());
-            fieldEntity.setFieldImg2(fieldDto.getFieldImg2());
+            if (fieldDto.getFieldImg1() != null) {
+                fieldEntity.setFieldImg1(fieldDto.getFieldImg1());
+            }
+            if (fieldDto.getFieldImg2() != null){
+                fieldEntity.setFieldImg2(fieldDto.getFieldImg2());
+            }
+            
             fieldRepo.save(fieldEntity); // Save updated entity back to the repository
         }
     }

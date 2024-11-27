@@ -102,6 +102,8 @@ public class FieldController {
         String byteFieldImg2 = "";
 
         try {
+
+            System.out.println(fieldName);
             byte[] bytesFieldImage1 = fieldImg1.getBytes();
             byteFieldImg1 = AppUtil.cropImageToBase64(bytesFieldImage1);
 
