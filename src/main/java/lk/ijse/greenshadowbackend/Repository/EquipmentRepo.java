@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EquipmentRepo extends JpaRepository<EquipmentEntity,String> {
-    @Query(value = "SELECT * FROM equipment WHERE eq_id = (SELECT eq_id FROM equipment ORDER BY CAST(SUBSTRING(eq_id, 7) AS UNSIGNED) DESC LIMIT 1);", nativeQuery = true)
+    @Query(value = "SELECT * FROM equipment WHERE eq_id = (SELECT eq_id FROM equipment ORDER BY CAST(SUBSTRING(eq_id,11) AS UNSIGNED) DESC LIMIT 1);", nativeQuery = true)
     EquipmentEntity findLastRowNative();
 }
