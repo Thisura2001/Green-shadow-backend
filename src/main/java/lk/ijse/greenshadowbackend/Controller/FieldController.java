@@ -91,43 +91,54 @@ public class FieldController {
         }
     }
     @PutMapping(value = "/{fieldId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void>updateField(@PathVariable ("fieldId") String fieldId,
-                                           @RequestPart ("fieldName")String fieldName,
-                                           @RequestPart ("location")String location,
-                                           @RequestPart ("extend") String extend,
-                                           @RequestPart ("fieldImg1")MultipartFile fieldImg1,
-                                           @RequestPart ("fieldImg2")MultipartFile fieldImg2){
-
-        String byteFieldImg1 = "";
-        String byteFieldImg2 = "";
+    public ResponseEntity<Void> updateField(
+            @PathVariable("fieldId") String fieldId,
+            @RequestPart("fieldName") String fieldName,
+            @RequestPart("location") String location,
+            @RequestPart("extend") String extend,
+            @RequestPart(value = "fieldImg1", required = false) MultipartFile fieldImg1,
+            @RequestPart(value = "fieldImg2", required = false) MultipartFile fieldImg2) {
 
         try {
+            // Convert images to Base64 only if they are provided
+            String byteFieldImg1 = null;
+            String byteFieldImg2 = null;
 
-            System.out.println(fieldName);
-            byte[] bytesFieldImage1 = fieldImg1.getBytes();
-            byteFieldImg1 = AppUtil.cropImageToBase64(bytesFieldImage1);
+            if (fieldImg1 != null && !fieldImg1.isEmpty()) {
+                byte[] bytesFieldImage1 = fieldImg1.getBytes();
+                byteFieldImg1 = AppUtil.cropImageToBase64(bytesFieldImage1);
+            }
 
-            byte[] bytesFieldImage2 = fieldImg2.getBytes();
-            byteFieldImg2 = AppUtil.cropImageToBase64(bytesFieldImage2);
+            if (fieldImg2 != null && !fieldImg2.isEmpty()) {
+                byte[] bytesFieldImage2 = fieldImg2.getBytes();
+                byteFieldImg2 = AppUtil.cropImageToBase64(bytesFieldImage2);
+            }
 
-
+            // Create FieldDto object
             FieldDto fieldDto = new FieldDto();
-
             fieldDto.setFieldId(fieldId);
             fieldDto.setFieldName(fieldName);
             fieldDto.setLocation(location);
             fieldDto.setExtend(extend);
-            fieldDto.setFieldImg1(byteFieldImg1);
-            fieldDto.setFieldImg2(byteFieldImg2);
 
+            // Update only non-null images
+            if (byteFieldImg1 != null) {
+                fieldDto.setFieldImg1(byteFieldImg1);
+            }
+            if (byteFieldImg2 != null) {
+                fieldDto.setFieldImg2(byteFieldImg2);
+            }
+
+            // Call service to update the field
             fieldService.updateField(fieldDto);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }catch (DataPersistException e) {
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }catch (Exception e){
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
