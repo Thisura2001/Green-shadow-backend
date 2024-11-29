@@ -93,28 +93,41 @@ public class CropController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(value = "/{cropId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> UpdateCrop(@PathVariable("cropId") String cropId,
-                                           @RequestPart("commonName") String commonName,
-                                           @RequestPart("scientificName") String scientificName,
-                                           @RequestPart("cropImg") MultipartFile cropImg,
-                                           @RequestPart("category") String category,
-                                           @RequestPart("season") String season,
-                                           @RequestPart ("field") String field
-    ) {
-        String cropBase64 = "";
+    public ResponseEntity<Void> UpdateCrop(
+            @PathVariable("cropId") String cropId,
+            @RequestPart("commonName") String commonName,
+            @RequestPart("scientificName") String scientificName,
+            @RequestPart(value = "cropImg", required = false) MultipartFile cropImg,
+            @RequestPart("category") String category,
+            @RequestPart("season") String season,
+            @RequestPart("field") String field) {
+
         try {
-            byte[] byteCropImg = cropImg.getBytes();
-            cropBase64 = Base64.getEncoder().encodeToString(byteCropImg);
+            // Convert image to Base64 only if provided
+            String cropBase64 = null;
+            if (cropImg != null && !cropImg.isEmpty()) {
+                byte[] byteCropImg = cropImg.getBytes();
+                cropBase64 = Base64.getEncoder().encodeToString(byteCropImg);
+            }
+
+            // Create and populate CropDto object
             CropDto cropDto = new CropDto();
             cropDto.setCropId(cropId);
             cropDto.setCommonName(commonName);
             cropDto.setScientificName(scientificName);
-            cropDto.setCropImg(cropBase64);
             cropDto.setCategory(category);
             cropDto.setSeason(season);
             cropDto.setField(field);
+
+            // Update only non-null image
+            if (cropBase64 != null) {
+                cropDto.setCropImg(cropBase64);
+            }
+
+            // Call service to update the crop
             cropService.updateCrop(cropId, cropDto);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
         } catch (DataPersistException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -123,4 +136,5 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

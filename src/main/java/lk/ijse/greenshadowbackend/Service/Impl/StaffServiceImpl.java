@@ -55,7 +55,7 @@ public class StaffServiceImpl implements StaffService {
     public void deleteStaff(String id) {
         Optional<StaffEntity> byId = staffRepo.findById(id);
         if (!byId.isPresent()){
-            throw new RuntimeException("staff not found");
+            throw   new RuntimeException("staff not found");
         }else {
             staffRepo.deleteById(id);
         }
