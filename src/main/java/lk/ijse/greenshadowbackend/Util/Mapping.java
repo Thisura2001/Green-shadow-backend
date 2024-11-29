@@ -125,17 +125,28 @@ public class Mapping {
 
     //for vehicle mapping
     public VehicleEntity toVehicleEntity(VehicleDto vehicleDTO) {
-        StaffEntity staffEntity = staffRepo.findById(vehicleDTO.getStaff())
-                .orElseThrow(() -> new RuntimeException("Staff not found with ID: " + vehicleDTO.getStaff()));
+        if (vehicleDTO.getStaff() == null) {
+            return new VehicleEntity(
+                    vehicleDTO.getVehicle_code(),
+                    vehicleDTO.getLicensePlateNumber(),
+                    vehicleDTO.getVehicleCategory(),
+                    vehicleDTO.getFuelType(),
+                    vehicleDTO.getStatus(),
+                    null // Pass StaffEntity here
+            );
+        } else {
+            StaffEntity staffEntity = staffRepo.findById(vehicleDTO.getStaff())
+                    .orElseThrow(() -> new RuntimeException("Staff not found with ID: " + vehicleDTO.getStaff()));
 
-        return new VehicleEntity(
-                vehicleDTO.getVehicle_code(),
-                vehicleDTO.getLicensePlateNumber(),
-                vehicleDTO.getVehicleCategory(),
-                vehicleDTO.getFuelType(),
-                vehicleDTO.getStatus(),
-                staffEntity // Pass StaffEntity here
-        );
+            return new VehicleEntity(
+                    vehicleDTO.getVehicle_code(),
+                    vehicleDTO.getLicensePlateNumber(),
+                    vehicleDTO.getVehicleCategory(),
+                    vehicleDTO.getFuelType(),
+                    vehicleDTO.getStatus(),
+                    staffEntity // Pass StaffEntity here
+            );
+        }
     }
 
     public VehicleDto toVehicleDTO(VehicleEntity vehicleEntity) {

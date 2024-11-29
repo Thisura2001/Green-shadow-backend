@@ -19,7 +19,7 @@ public class VehicleEntity implements SuperEntity {
     private String fuelType;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     private StaffEntity staff;
 }

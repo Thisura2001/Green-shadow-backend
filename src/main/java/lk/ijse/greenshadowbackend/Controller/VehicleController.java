@@ -64,6 +64,7 @@ public class VehicleController {
     }
     @DeleteMapping(value = "/{vehicle_code}")
     public ResponseEntity<Void>deleteVehicle(@PathVariable ("vehicle_code") String vehicle_code){
+        System.out.println("vehicle delete"+vehicle_code);
         try {
             if (!Regex.idValidator(vehicle_code).matches()){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -73,7 +73,11 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleDto.setVehicleCategory(vehicleEntity.getVehicleCategory());
             vehicleDto.setFuelType(vehicleEntity.getFuelType());
             vehicleDto.setStatus(vehicleEntity.getStatus());
-            vehicleDto.setStaff(vehicleEntity.getStaff().getId()); // Assuming staff is associated correctly
+            if (vehicleEntity.getStaff() != null) {
+                vehicleDto.setStaff(vehicleEntity.getStaff().getId());
+            } else {
+                vehicleDto.setStaff(null);
+            }
 
             vehicleDtos.add(vehicleDto);
         }

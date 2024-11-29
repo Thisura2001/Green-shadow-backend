@@ -53,6 +53,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void deleteStaff(String id) {
+        System.out.println("satffid: "+id);
         Optional<StaffEntity> byId = staffRepo.findById(id);
         if (!byId.isPresent()){
             throw   new RuntimeException("staff not found");
