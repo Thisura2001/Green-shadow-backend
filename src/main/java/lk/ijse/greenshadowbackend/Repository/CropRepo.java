@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CropRepo extends JpaRepository<CropEntity,String> {
-    @Query(value = "SELECT * FROM crop WHERE crop_id = (SELECT crop_id FROM crop ORDER BY CAST(SUBSTRING(crop_id, 7) AS UNSIGNED) DESC LIMIT 1);", nativeQuery = true)
+    @Query(value = "SELECT * FROM crop WHERE crop_id = (SELECT crop_id FROM crop ORDER BY CAST(SUBSTRING(crop_id, 6) AS UNSIGNED) DESC LIMIT 1);", nativeQuery = true)
     CropEntity findLastRowNative();
 }
