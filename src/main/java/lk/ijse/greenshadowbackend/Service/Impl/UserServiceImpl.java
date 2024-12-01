@@ -50,6 +50,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailsService userDetailsService() {
-        return null;
+        return username -> userRepo.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User with email " + username + " not found"));
     }
 }
