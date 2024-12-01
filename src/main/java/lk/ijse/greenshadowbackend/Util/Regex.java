@@ -38,11 +38,11 @@ public class Regex {
 //        return regexPattern.matcher(id).matches();
 //    }
 //
-//    public static boolean userIdMatcher(String userId) {
-//        String regexForUserId = "^USER-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
-//        Pattern regexPattern = Pattern.compile(regexForUserId);
-//        return regexPattern.matcher(userId).matches();
-//    }
+    public static boolean userIdMatcher(String userId) {
+        String regexForUserId = "^USER-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
+        Pattern regexPattern = Pattern.compile(regexForUserId);
+        return regexPattern.matcher(userId).matches();
+    }
 //
 //    public static boolean vehicleCodeMatcher(String vehicleCode) {
 //        String regexForVehicleCode = "^VEHICLE-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
