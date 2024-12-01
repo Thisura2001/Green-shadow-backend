@@ -5,12 +5,11 @@ import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
 import lk.ijse.greenshadowbackend.Dto.StaffStatus;
 import lk.ijse.greenshadowbackend.Entity.Impl.StaffEntity;
 import lk.ijse.greenshadowbackend.Exception.StaffNotFoundException;
+import lk.ijse.greenshadowbackend.Repository.FieldRepo;
 import lk.ijse.greenshadowbackend.Repository.StaffRepo;
 import lk.ijse.greenshadowbackend.Service.StaffService;
-import lk.ijse.greenshadowbackend.Util.AppUtil;
 import lk.ijse.greenshadowbackend.Util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +23,8 @@ public class StaffServiceImpl implements StaffService {
     private StaffRepo staffRepo;
     @Autowired
     private Mapping mapping;
+    @Autowired
+    private FieldRepo fieldRepo;
     @Override
     public void saveStaff(StaffDto staffDto) {
         int number = 0;

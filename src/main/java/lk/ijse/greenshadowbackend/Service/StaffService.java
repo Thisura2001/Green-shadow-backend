@@ -2,7 +2,6 @@ package lk.ijse.greenshadowbackend.Service;
 
 import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
 import lk.ijse.greenshadowbackend.Dto.StaffStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

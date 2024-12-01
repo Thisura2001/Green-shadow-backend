@@ -3,7 +3,6 @@ package lk.ijse.greenshadowbackend.Controller;
 import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.FieldStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.FieldDto;
-import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
 import lk.ijse.greenshadowbackend.Exception.FieldNotFoundException;
 import lk.ijse.greenshadowbackend.Service.FieldService;

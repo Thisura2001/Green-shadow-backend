@@ -4,14 +4,11 @@ import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
 import lk.ijse.greenshadowbackend.Dto.FieldStatus;
 import lk.ijse.greenshadowbackend.Dto.Impl.FieldDto;
 import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
-import lk.ijse.greenshadowbackend.Exception.CropNotFoundException;
 import lk.ijse.greenshadowbackend.Exception.FieldNotFoundException;
 import lk.ijse.greenshadowbackend.Repository.FieldRepo;
 import lk.ijse.greenshadowbackend.Service.FieldService;
-import lk.ijse.greenshadowbackend.Util.AppUtil;
 import lk.ijse.greenshadowbackend.Util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
