@@ -44,4 +44,8 @@ public class AuthController {
     public ResponseEntity<JWTAuthResponse> signIn(@RequestBody SignIn signIn){
         return ResponseEntity.ok(authService.signIn(signIn));
     }
+    @PostMapping("refresh")
+    public ResponseEntity<JWTAuthResponse> refreshToken(@RequestParam("refreshToken") String exitingToken) {
+        return ResponseEntity.ok(authService.refreshToken(exitingToken));
+    }
 }
