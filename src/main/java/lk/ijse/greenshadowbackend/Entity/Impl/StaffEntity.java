@@ -32,9 +32,21 @@ public class StaffEntity implements SuperEntity {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @ManyToMany
-    @JoinTable(name = "Field_Staff_assignment",joinColumns = @JoinColumn(name = "staff_id"), inverseJoinColumns = @JoinColumn(name = "fieldId"))
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "Field_Staff_assignment",
+            joinColumns = @JoinColumn(name = "staff_id"),
+            inverseJoinColumns = @JoinColumn(name = "fieldId"))
     private List<FieldEntity> fields;
     @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<VehicleEntity> vehicle;
+
+    public void addField(FieldEntity field){
+        fields.add(field);
+        field.getAllocated_staff().add(this);
+    }
+
+    public void removeField(FieldEntity field){
+        fields.remove(field);
+        field.getAllocated_staff().remove(this);
+    }
 }

@@ -5,15 +5,19 @@ import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
 import lk.ijse.greenshadowbackend.Dto.StaffStatus;
 import lk.ijse.greenshadowbackend.Exception.DataPersistException;
 import lk.ijse.greenshadowbackend.Exception.StaffNotFoundException;
+import lk.ijse.greenshadowbackend.Service.FieldService;
 import lk.ijse.greenshadowbackend.Service.StaffService;
 import lk.ijse.greenshadowbackend.Util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/staff")
@@ -21,15 +25,24 @@ import java.util.List;
 public class StaffController {
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private FieldService fieldService;
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void>saveStaff(@RequestBody StaffDto staffDto){
+    public ResponseEntity<Map<String, String>>saveStaff(@RequestBody StaffDto staffDto) {
         try {
+            String nextId = staffService.generateNextId();
             staffService.saveStaff(staffDto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }catch (DataPersistException e){
+
+            Map<String, String> responseBody = new HashMap<>();
+            responseBody.put("staffId", nextId);
+            return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
+        } catch (DataPersistException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -68,6 +81,33 @@ public class StaffController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             staffService.updateStaff(id,staffDto);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/{staffId}/assign/{fieldId}")
+    public ResponseEntity<Void>assignFieldToStaff(@PathVariable String staffId,@PathVariable String fieldId){
+        try {
+            if (!Regex.idValidator(staffId).matches()|| !Regex.idValidator(fieldId).matches()){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            staffService.assignFieldToStaff(staffId,fieldId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping(value = "/{staffId}/remove/{fieldId}")
+    public ResponseEntity<Void>removeFieldFromStaff(@PathVariable String staffId,@PathVariable String fieldId){
+        try {
+            if (!Regex.idValidator(staffId).matches()|| !Regex.idValidator(fieldId).matches()){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            staffService.removeFieldFromStaff(staffId,fieldId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (Exception e){
             e.printStackTrace();

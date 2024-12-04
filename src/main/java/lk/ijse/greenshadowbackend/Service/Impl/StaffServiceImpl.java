@@ -1,8 +1,10 @@
 package lk.ijse.greenshadowbackend.Service.Impl;
 
 import lk.ijse.greenshadowbackend.CustomStatusCode.SelectedErrorStatusCode;
+import lk.ijse.greenshadowbackend.Dto.Impl.FieldDto;
 import lk.ijse.greenshadowbackend.Dto.Impl.StaffDto;
 import lk.ijse.greenshadowbackend.Dto.StaffStatus;
+import lk.ijse.greenshadowbackend.Entity.Impl.FieldEntity;
 import lk.ijse.greenshadowbackend.Entity.Impl.StaffEntity;
 import lk.ijse.greenshadowbackend.Exception.StaffNotFoundException;
 import lk.ijse.greenshadowbackend.Repository.FieldRepo;
@@ -10,6 +12,7 @@ import lk.ijse.greenshadowbackend.Repository.StaffRepo;
 import lk.ijse.greenshadowbackend.Service.StaffService;
 import lk.ijse.greenshadowbackend.Util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,20 +25,28 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private StaffRepo staffRepo;
     @Autowired
-    private Mapping mapping;
-    @Autowired
     private FieldRepo fieldRepo;
+    @Autowired
+    private Mapping mapping;
     @Override
     public void saveStaff(StaffDto staffDto) {
+        StaffEntity staff;
+        staffDto.setId(generateNextId());
+
+        staff = mapping.toStaffEntity(staffDto);
+        staffRepo.save(staff);
+
+    }
+
+    @Override
+    public String generateNextId() {
         int number = 0;
         StaffEntity staff = staffRepo.findLastRowNative();
-        if (staff != null){
+        if (staff != null) {
             String[] parts = staff.getId().split("-");
             number = Integer.parseInt(parts[1]);
         }
-        staffDto.setId("STAFF-"+(number+1));
-        staff = mapping.toStaffEntity(staffDto);
-        staffRepo.save(staff);
+        return "STAFF-" + (number + 1);
     }
 
     @Override
@@ -79,5 +90,21 @@ public class StaffServiceImpl implements StaffService {
             byId.get().setEmail(staffDto.getEmail());
             byId.get().setRole(staffDto.getRole());
         }
+    }
+
+    @Override
+    public void assignFieldToStaff(String staffId, String fieldCode) {
+        StaffEntity fetchedStaff = staffRepo.findById(staffId).orElseThrow(() -> new RuntimeException("Staff id not found"));
+        FieldEntity fetchedField = fieldRepo.findById(fieldCode).orElseThrow(() -> new RuntimeException("Field id not found"));
+        fetchedStaff.addField(fetchedField);
+        staffRepo.save(fetchedStaff);
+    }
+
+    @Override
+    public void removeFieldFromStaff(String staffId, String fieldCode) {
+        StaffEntity fetchedStaff = staffRepo.findById(staffId).orElseThrow(() -> new RuntimeException("Staff id not found"));
+        FieldEntity fetchedField = fieldRepo.findById(fieldCode).orElseThrow(() -> new RuntimeException("Field id not found"));
+        fetchedStaff.removeField(fetchedField);
+        staffRepo.save(fetchedStaff);
     }
 }

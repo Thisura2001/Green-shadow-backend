@@ -8,6 +8,8 @@ import java.util.List;
 public interface StaffService {
     void saveStaff(StaffDto staffDto);
 
+    String generateNextId();
+
     StaffStatus getStaffById(String id);
 
     List<StaffDto> getAllStaff();
@@ -15,4 +17,8 @@ public interface StaffService {
     void deleteStaff(String id);
 
     void updateStaff(String id, StaffDto staffDto);
+
+    void assignFieldToStaff(String staffId, String fieldCode);
+
+    void removeFieldFromStaff(String staffId, String fieldCode);
 }

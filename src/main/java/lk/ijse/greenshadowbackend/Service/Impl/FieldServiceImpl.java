@@ -23,17 +23,18 @@ public class FieldServiceImpl implements FieldService {
     private FieldRepo fieldRepo;
     @Autowired
     private Mapping mapping;
+
     @Override
     public void saveField(FieldDto fieldDto) {
-       int number = 0;
-       FieldEntity field = fieldRepo.findLastRowNative();
-       if (field!=null){
-           String[] parts = field.getFieldId().split("-");
-           number = Integer.parseInt(parts[1]);
-       }
-       fieldDto.setFieldId("FIELD-"+(number+1));
-       field = mapping.toFieldEntity(fieldDto);
-       fieldRepo.save(field);
+        int number = 0;
+        FieldEntity field = fieldRepo.findLastRowNative();
+        if (field != null) {
+            String[] parts = field.getFieldId().split("-");
+            number = Integer.parseInt(parts[1]);
+        }
+        fieldDto.setFieldId("FIELD-" + (number + 1));
+        field = mapping.toFieldEntity(fieldDto);
+        fieldRepo.save(field);
     }
 
     @Override
@@ -95,12 +96,11 @@ public class FieldServiceImpl implements FieldService {
             if (fieldDto.getFieldImg1() != null) {
                 fieldEntity.setFieldImg1(fieldDto.getFieldImg1());
             }
-            if (fieldDto.getFieldImg2() != null){
+            if (fieldDto.getFieldImg2() != null) {
                 fieldEntity.setFieldImg2(fieldDto.getFieldImg2());
             }
-            
+
             fieldRepo.save(fieldEntity); // Save updated entity back to the repository
         }
     }
-
 }
