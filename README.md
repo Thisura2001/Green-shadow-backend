@@ -123,7 +123,7 @@ crop-management-system/
 - **Backend:** Spring Boot, JWT, Hibernate
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap
 - **Build Tool:** Gradle
-- **Database:** H2/PostgreSQL/MySQL (configured in `application.properties`)
+- **Database:** MySQL (configured in `application.properties`)
 
 ---
 
