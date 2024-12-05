@@ -13,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<Map<String, String>>saveStaff(@RequestBody StaffDto staffDto) {
         try {
             String nextId = staffService.generateNextId();
@@ -57,6 +59,7 @@ public class StaffController {
         return staffService.getAllStaff();
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<Void>DeleteStaff(@PathVariable ("id") String id){
        try {
            if (!Regex.idValidator(id).matches()){
@@ -73,6 +76,7 @@ public class StaffController {
        }
     }
     @PutMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<Void>updateStaff(@PathVariable String id,@RequestBody StaffDto staffDto){
         try {
             if (!Regex.idValidator(id).matches()|| staffDto == null){
