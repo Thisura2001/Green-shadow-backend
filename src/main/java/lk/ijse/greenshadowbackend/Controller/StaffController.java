@@ -25,8 +25,6 @@ import java.util.Map;
 public class StaffController {
     @Autowired
     private StaffService staffService;
-    @Autowired
-    private FieldService fieldService;
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>>saveStaff(@RequestBody StaffDto staffDto) {
         try {
