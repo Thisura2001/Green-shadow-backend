@@ -28,10 +28,8 @@ A **Crop Management System** built with **Spring Boot** and **JWT** for backend 
 
 ## Project Setup
 
-1. Clone the Frontend:
-   ```bash
-  https://github.com/Thisura2001/Crop-monitoring-system-frontend.git
-   ```
+1. Clone the Frontend:  https://github.com/Thisura2001/Crop-monitoring-system-frontend.git
+ 
 
 2. Run the application:
    ```bash
