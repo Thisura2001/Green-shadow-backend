@@ -1,6 +1,3 @@
-Here's the GitHub-friendly README that you can copy and paste directly:
-
----
 
 # Crop Management System API
 
@@ -130,25 +127,6 @@ crop-management-system/
 
 ---
 
-## Contributing
-
-1. Fork this repository.
-2. Create a feature branch:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add feature name"
-   ```
-4. Push the branch:
-   ```bash
-   git push origin feature-name
-   ```
-5. Create a pull request.
-
----
-
 ## License
 
 This project is licensed under the MIT License.
@@ -157,9 +135,7 @@ This project is licensed under the MIT License.
 
 ## Author
 
-- **Shaini**
+- **Thisura Liyanage**
   - 🌍 Agalawatta, Sri Lanka
 
 --- 
-
-You can replace `your-username` with your actual GitHub username and customize any specific details as needed!
