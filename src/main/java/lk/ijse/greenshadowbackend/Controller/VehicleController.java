@@ -49,6 +49,7 @@ public class VehicleController {
         return vehicleService.getAllVehicles();
     }
     @PutMapping(value = "/{vehicle_code}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<Void>updateVehicle(@PathVariable ("vehicle_code") String vehicle_code,@RequestBody VehicleDto vehicleDto){
         try {
             if (!Regex.idValidator(vehicle_code).matches()||vehicleDto == null){
@@ -65,6 +66,7 @@ public class VehicleController {
         }
     }
     @DeleteMapping(value = "/{vehicle_code}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<Void>deleteVehicle(@PathVariable ("vehicle_code") String vehicle_code){
         System.out.println("vehicle delete"+vehicle_code);
         try {
