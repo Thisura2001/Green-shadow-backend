@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,7 @@ public class LogController {
     @Autowired
     private LogService logService;
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SCIENTIST')")
     public ResponseEntity<Void>saveLog(@RequestPart ("log_date") String log_date,
                                        @RequestPart ("log_details") String log_details,
                                        @RequestPart ("observed_image") MultipartFile observed_image
@@ -62,6 +64,7 @@ public class LogController {
         return logService.getAllLog();
     }
     @PutMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SCIENTIST')")
     public ResponseEntity<Void>updateLog(@RequestPart ("log_date") String log_date,
                                          @RequestPart ("log_details") String log_details,
                                          @RequestPart ("observed_image") MultipartFile observed_image,
@@ -89,6 +92,7 @@ public class LogController {
         }
     }
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SCIENTIST')")
     public ResponseEntity<Void>deleteLog(@PathVariable ("id") String id){
         try {
             if (!Regex.idValidator(id).matches()){
