@@ -67,10 +67,11 @@ A **Crop Management System** built with **Spring Boot** and **JWT** for backend 
   Content-Type: application/json
 
   {
-    "name": "Corn",
-    "fieldId": "F001",
+    "commonName": "Corn",
+    "scientificName":"cron",
+    "cropImg": "img",
     "season": "Spring",
-    "harvestDate": "2024-04-01"
+    "field": "FIELD-1"
   }
   ```
 
